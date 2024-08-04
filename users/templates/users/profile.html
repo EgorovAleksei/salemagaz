@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+    <main class="main__content_wrapper">
+
+
+        <!-- my account section start -->
+        <section class="my__account--section section--padding">
+            <div class="container">
+                <p class="account__welcome--text">Hello, {{ user }} welcome to your dashboard!</p>
+                <div class="my__account--section__inner border-radius-10 d-flex">
+
+                    <div class="account__left--sidebar">
+                        <ul class="account__menu">
+                            <li class="account__menu--list active"><a href="{% url 'user:profile' %}">My Profile</a></li>
+                            <li class="account__menu--list"><a href="{% url 'user:user_cart' %}">Корзина</a></li>
+                            <li class="account__menu--list"><a href="my-account.html">Dashboard</a></li>
+                            <li class="account__menu--list"><a href="my-account-2.html">Addresses</a></li>
+                            <li class="account__menu--list"><a href="wishlist.html">Wishlist</a></li>
+                            <li class="account__menu--list"><a href="{% url 'user:logout' %}">Log Out</a></li>
+                        </ul>
+                    </div>
+                    <div class="account__wrapper">
+                        <form action="{% url "user:profile" %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                             <div class="account__login register">
+                                 <div class="account__login--header mb-25">
+                                            <h2 class="account__login--header__title mb-10">Изменить данные</h2>
+                                            <p class="account__login--header__desc">Register here if you are a new customer</p>
+                                 </div>
+                                <div class="account__login--inner">
+                                    <label>Аватар</label>
+                                        <img width="100" height="100"
+                                             src="{% if user.image %} {{ user.image.url }}
+                                                    {% else %} {% static 'img/default_avatar.jpg' %}
+                                                  {% endif %}"
+                                            class="img-thumbnail" alt="Аватар">
+                                        <input type="file" name="image" accept="image/*">
+
+                                    <label>Имя</label>
+                                        <input class="account__login--input"
+                                               value="{{ form.first_name.value }}"
+                                               name="first_name" placeholder="Имя" type="text">
+                                             {% if form.first_name.errors %}
+                                                <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                    {{ form.first_name.errors }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            {% endif %}
+
+
+                                    <label>Фамилия</label>
+                                        <input class="account__login--input"
+                                               value="{{ form.last_name.value }}"
+                                               name="last_name" placeholder="Фамилия" type="text">
+                                             {% if form.last_name.errors %}
+                                                <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                    {{ form.last_name.errors }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            {% endif %}
+
+                                    <label>Логин</label>
+                                        <input class="account__login--input"
+                                               value="{{ form.username.value }}"
+                                               name="username" placeholder="Username" type="text">
+                                             {% if form.username.errors %}
+                                                <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                    {{ form.username.errors }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            {% endif %}
+
+                                    <label>Почта </label>
+                                        <input class="account__login--input"
+                                               value="{{ form.email.value }}"
+                                               name="email" placeholder="Email Addres" type="email">
+                                            {% if form.email.errors %}
+                                                <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                    {{ form.email.errors }}
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            {% endif %}
+
+{#                                            {% if form.password1.errors %}#}
+{#                                                <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">#}
+{#                                                    {{ form.password1.errors }}#}
+{#                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#                                                </div>#}
+{#                                            {% endif %}#}
+{#                                        <label>#}
+{#                                            <input class="account__login--input"#}
+{#                                                   value="{% if form.password1.value %}{{ form.password1.value }}{% endif %}"#}
+{#                                                   name="password1" placeholder="Password" type="password">#}
+{#                                        </label>#}
+{#                                            {% if form.password2.errors %}#}
+{#                                                <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">#}
+{#                                                    {{ form.password2.errors }}#}
+{#                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#                                                </div>#}
+{#                                            {% endif %}#}
+{#                                        <label>#}
+{#                                            <input class="account__login--input"#}
+{#                                                   value="{% if form.password2.value %}{{ form.password2.value }}{% endif %}"#}
+{#                                                   name="password2" placeholder="Confirm Password" type="password">#}
+{#                                        </label>#}
+                                    <button class="account__login--btn primary__btn mb-10" type="submit">Сохранить</button>
+                                    <div class="account__login--remember position__relative">
+                                        <input class="checkout__checkbox--input" id="check2" type="checkbox">
+                                        <span class="checkout__checkbox--checkmark"></span>
+                                        <label class="checkout__checkbox--label login__remember--label" for="check2">
+                                            I have read and agree to the terms & conditions</label>
+                                    </div>
+                                </div>
+                             </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- my account section end -->
+
+        <!-- Start shipping section -->
+        <section class="shipping__section">
+            <div class="container">
+                <div class="shipping__inner style2 d-flex">
+                    <div class="shipping__items style2 d-flex align-items-center">
+                        <div class="shipping__icon">  
+                            <img src="{% static "img/other/shipping1.webp" %}" alt="icon-img">
+                        </div>
+                        <div class="shipping__content">
+                            <h2 class="shipping__content--title h3">Free Shipping</h2>
+                            <p class="shipping__content--desc">Free shipping over $100</p>
+                        </div>
+                    </div>
+                    <div class="shipping__items style2 d-flex align-items-center">
+                        <div class="shipping__icon">  
+                            <img src="{% static "img/other/shipping2.webp" %}" alt="icon-img">
+                        </div>
+                        <div class="shipping__content">
+                            <h2 class="shipping__content--title h3">Support 24/7</h2>
+                            <p class="shipping__content--desc">Contact us 24 hours a day</p>
+                        </div>
+                    </div>
+                    <div class="shipping__items style2 d-flex align-items-center">
+                        <div class="shipping__icon">  
+                            <img src="{% static "img/other/shipping3.webp" %}" alt="icon-img">
+                        </div>
+                        <div class="shipping__content">
+                            <h2 class="shipping__content--title h3">100% Money Back</h2>
+                            <p class="shipping__content--desc">You have 30 days to Return</p>
+                        </div>
+                    </div>
+                    <div class="shipping__items style2 d-flex align-items-center">
+                        <div class="shipping__icon">  
+                            <img src="{% static "img/other/shipping4.webp" %}" alt="icon-img">
+                        </div>
+                        <div class="shipping__content">
+                            <h2 class="shipping__content--title h3">Payment Secure</h2>
+                            <p class="shipping__content--desc">We ensure secure payment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End shipping section -->
+
+    </main>
+
+{% endblock %}

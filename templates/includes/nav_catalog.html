@@ -1,0 +1,354 @@
+{% load static menu_cat_tags %}
+
+ <div class="header__bottom bg__primary">
+            <div class="container">
+                <div class="header__bottom--inner position__relative d-flex align-items-center">
+                    <div class="categories__menu mobile-v-none">
+                        <div class="categories__menu--header bg__secondary text-white d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#categoriesAccordion">
+                            <svg class="categories__list--icon" width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="13" height="1.5" fill="currentColor"/>
+                                <rect y="4.44434" width="18" height="1.5" fill="currentColor"/>
+                                <rect y="8.88892" width="15" height="1.5" fill="currentColor"/>
+                                <rect y="13.3333" width="17" height="1.5" fill="currentColor"/>
+                                </svg>
+
+                            
+                            <span class="categories__menu--title">Выберете</span>
+                            <svg class="categories__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394" viewBox="0 0 10.355 6.394">
+                                <path  d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="dropdown__categories--menu border-radi-5 active collapse
+                            {% if title ==  'SaleMagaz - Главная' %}
+                        	show
+                            {% endif %}" id="categoriesAccordion">
+                            <ul class="d-none d-lg-block">
+
+                            {% menu_cat as categories %}
+                                {% for cat in categories.items %}
+                                    <li class="categories__menu--items">
+
+                                        {% if cat.1.children %}
+{#                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>#}
+                                           <a class="categories__menu--link" href="#">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > </svg>
+                                            {{ cat.1.name|cut:"{'"|cut:"'}" }}
+                                        <svg class="categories__menu--right__arrow--icon" xmlns="http://www.w3.org/2000/svg" width="17.007" height="16.831" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M184 112l144 144-144 144"/></svg>
+                                            </a>
+
+                                        <ul class="categories__submenu border-radi-10 d-flex jtify-content-between">
+                                            {% for children1 in cat.1.children.items %}
+                                                <li class="categories__submenu--items">
+                                                {% if children1.1.children %}
+
+                                                    <strong class="categories__submenu--items__text">{{ children1.1.name }}</strong>
+                                                    <ul class="categories__submenu--child">
+                                                        {% for children2 in children1.1.children.items %}
+                                                            <li class="categories__submenu--child__items">
+                                                                <a class="categories__submenu--child__items--link" href="{% url 'catalog:index' children2.0 %}">
+                                                                {{ children2.1.name }} id {{ children2.0 }}</a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% else %}
+                                                    <a class="categories__submenu--items__text" href="{% url 'catalog:index' children1.0 %}">
+                                                    <strong>{{ children1.1.name }} id {{ children1.0 }}</strong></a>
+                                                {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            <a class="categories__menu--link" href="{% url 'catalog:index' cat.0 %}">
+                                            {{ cat.1.name|cut:"{'"|cut:"'}" }}
+                                        </a>
+                                        {% endif %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+
+
+                            </ul>
+                        </div>
+                    </div>
+                <!-- Меню для мобилок-->
+                    <div class="categories__menu mobile-v-block">
+                        <div class="categories__menu--header bg__secondary text-white d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#categoriesAccordion2">
+                            <svg class="categories__list--icon" width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="13" height="1.5" fill="currentColor"/>
+                                <rect y="4.44434" width="18" height="1.5" fill="currentColor"/>
+                                <rect y="8.88892" width="15" height="1.5" fill="currentColor"/>
+                                <rect y="13.3333" width="17" height="1.5" fill="currentColor"/>
+                                </svg>
+
+                            <span class="categories__menu--title">Select catagories</span>
+                            <svg class="categories__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394" viewBox="0 0 10.355 6.394">
+                                <path  d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="dropdown__categories--menu border-radi-5 active collapse" id="categoriesAccordion2">
+                            <nav class="category__mobile--menu">
+                                <ul class="category__mobile--menu_ul">
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg> Lighting
+                                        </a>
+                                    </li>
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>  Smart Devices
+                                        </a>
+                                        <ul class="category__sub--menu">
+                                            <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="{% url 'catalog:index' %}">Body Parts</a>
+                                                <ul class="category__sub--menu">
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Brake Calipers </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Oil and Vinegar </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Engine Oil </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Oil Filters </a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="{% url 'catalog:index' %}">Interior Parts</a>
+                                                <ul class="category__sub--menu">
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Air Boxes </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Tail Lights </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Mobile Electronic </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Car Covers </a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="{% url 'catalog:index' %}">Engine & Drivetrain</a>
+                                                <ul class="category__sub--menu">
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Cabin Air Filters </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Pistons liners </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Bread and Juice </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Paintworks </a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="{% url 'catalog:index' %}">Cargo Accessories</a>
+                                                <ul class="category__sub--menu">
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Body Parts </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Engine Parts</a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Tires & Wheels </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Repair Parts </a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg> Paintworks
+                                        </a>
+                                    </li>
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> Replacement Parts
+                                        </a>
+                                        <ul class="category__sub--menu">
+                                            <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="{% url 'catalog:index' %}">Body Parts</a>
+                                                <ul class="category__sub--menu">
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Brake Calipers </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Oil and Vinegar </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Engine Oil </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Oil Filters </a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="{% url 'catalog:index' %}">Interior Parts</a>
+                                                <ul class="category__sub--menu">
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Air Boxes </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Tail Lights </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Mobile Electronic </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Car Covers </a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="{% url 'catalog:index' %}">Engine & Drivetrain</a>
+                                                <ul class="category__sub--menu">
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Cabin Air Filters </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Pistons liners </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Bread and Juice </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Paintworks </a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="categories__submenu--items"><a class="categories__submenu--items__text" href="{% url 'catalog:index' %}">Cargo Accessories</a>
+                                                <ul class="category__sub--menu">
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Body Parts </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Engine Parts</a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Tires & Wheels </a></li>
+                                                    <li class="categories__submenu--child__items"><a class="categories__submenu--child__items--link" href="{% url 'catalog:index' %}">Repair Parts </a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512"><circle cx="256" cy="184" r="120" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/><circle cx="344" cy="328" r="120" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/><circle cx="168" cy="328" r="120" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/></svg> Beauty & Care
+                                        </a>
+                                    </li>
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg> Car Parts
+                                        </a>
+                                    </li>
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon"  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><line x1="22" y1="12" x2="2" y2="12"></line><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path><line x1="6" y1="16" x2="6.01" y2="16"></line><line x1="10" y1="16" x2="10.01" y2="16"></line></svg>Gaming Toiys
+                                        </a>
+                                    </li>
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg> Oil Fluids
+                                        </a>
+                                    </li>
+                                    <li class="categories__menu--items">
+                                        <a class="categories__menu--link" href="{% url 'catalog:index' %}">
+                                            <svg class="categories__menu--svgicon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg> Baby Car Seat
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="header__right--area d-flex jtify-content-between align-items-center">
+                        <div class="header__menu">
+                            <nav class="header__menu--navigation">
+                                <ul class="header__menu--wrapper d-flex">
+
+                                    <a class="header__menu--link text-white active" href="{% url 'main:index' %}">На главную
+                                    </a>
+
+                                    <li class="header__menu--items mega__menu--items">
+                                        <a class="header__menu--link text-white" href="{% url 'catalog:index' %}">Shop
+                                            <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12" height="7.41" viewBox="0 0 12 7.41">
+                                                <path  d="M16.59,8.59,12,13.17,7.41,8.59,6,10l6,6,6-6Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
+                                            </svg>
+                                        </a>
+                                        <ul class="header__mega--menu d-flex">
+                                            <li class="header__mega--menu__li">
+                                                <ul class="header__mega--sub__menu">
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="{% url 'catalog:index' %}">Shop Left Sidebar</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="shop-right-sidebar.html">Shop Right Sidebar</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="shop-grid.html">Shop Grid</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="shop-grid-list.html">Shop Grid List</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="shop-list.html">Shop List</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="header__mega--menu__li">
+                                                <ul class="header__mega--sub__menu">
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="product-details.html">Product Details</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="product-video.html">Video Product</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="product-details.html">Variable Product</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="product-left-sidebar.html">Product Left Sidebar</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="product-gallery.html">Product Gallery</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="header__mega--menu__li">
+                                                <ul class="header__mega--sub__menu">
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="{% url 'user:profile' %}">My Account</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="my-account-2.html">My Account 2</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="404.html">404 Page</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="{% url 'user:login' %}">Login Page</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="faq.html">Faq Page</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="header__mega--menu__li">
+                                                <ul class="header__mega--sub__menu">
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="{% url 'main:about' %}">About nav_cat</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="{% url 'main:contact' %}">Контакты </a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="portfolio.html">Portfolio</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="compare.html">Compare</a></li>
+                                                    <li class="header__mega--sub__menu_li"><a class="header__mega--sub__menu--title" href="checkout.html">Checkout</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="header__mega--menu__li fullscreen__style d-flex">
+                                                <a class="header__mega--menu__banner display-block" href="{% url 'catalog:index' %}"><img class="header__mega--menu__banner--img" src="{% static "img/banner/banner1.webp" %}" alt="banner-menu">
+                                                    <div class="banner__content">
+                                                        <span class="banner__content--subtitle text__secondary mb-10">20% off</span>
+                                                        <h2 class="banner__content--title"><span class="banner__content--title__inner">New</span> COLLECTION</h2>
+                                                        <span class="banner__content--price">$22.99</span>
+                                                    </div>
+                                                </a>
+                                                <a class="header__mega--menu__banner display-block" href="{% url 'catalog:index' %}"><img class="header__mega--menu__banner--img" src="{% static "img/banner/banner2.webp" %}" alt="banner-menu">
+                                                    <div class="banner__content right">
+                                                        <span class="banner__badge--style2">20% Off</span>
+                                                        <h2 class="banner__content--title"><span class="banner__content--title__inner"> ON </span> SALE <br> PRODUCT</h2>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="header__menu--items">
+                                        <a class="header__menu--link text-white" href="{% url 'catalog:index' %}">Accesories </a>
+                                    </li>
+                                    <li class="header__menu--items">
+                                        <a class="header__menu--link text-white" href="blog.html">Blog
+                                            <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12" height="7.41" viewBox="0 0 12 7.41">
+                                                <path  d="M16.59,8.59,12,13.17,7.41,8.59,6,10l6,6,6-6Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
+                                            </svg>
+                                        </a>
+                                        <ul class="header__sub--menu">
+                                            <li class="header__sub--menu__items"><a href="blog.html" class="header__sub--menu__link">Blog Grid</a></li>
+                                            <li class="header__sub--menu__items"><a href="blog-details.html" class="header__sub--menu__link">Blog Details</a></li>
+                                            <li class="header__sub--menu__items"><a href="blog-left-sidebar.html" class="header__sub--menu__link">Blog Left Sidebar</a></li>
+                                            <li class="header__sub--menu__items"><a href="blog-right-sidebar.html" class="header__sub--menu__link">Blog Right Sidebar</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="header__menu--items">
+                                        <a class="header__menu--link text-white" href="#">Pages
+                                            <svg class="menu__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12" height="7.41" viewBox="0 0 12 7.41">
+                                                <path  d="M16.59,8.59,12,13.17,7.41,8.59,6,10l6,6,6-6Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
+                                            </svg>
+                                        </a>
+                                        <ul class="header__sub--menu">
+                                            <li class="header__sub--menu__items"><a href="{% url 'main:about' %}" class="header__sub--menu__link">About8</a></li>
+                                            <li class="header__sub--menu__items"><a href="{% url 'main:contact' %}" class="header__sub--menu__link">Контакты </a></li>
+                                            <li class="header__sub--menu__items"><a href="cart.html" class="header__sub--menu__link">Cart Page</a></li>
+                                            <li class="header__sub--menu__items"><a href="portfolio.html" class="header__sub--menu__link">Portfolio Page</a></li>
+                                            <li class="header__sub--menu__items"><a href="wishlist.html" class="header__sub--menu__link">Wishlist Page</a></li>
+                                            <li class="header__sub--menu__items"><a href="privacy-policy.html" class="header__sub--menu__link">Privacy Policy</a></li>
+                                            <li class="header__sub--menu__items"><a href="{% url 'user:login' %}" class="header__sub--menu__link">Login Page</a></li>
+                                            <li class="header__sub--menu__items"><a href="404.html" class="header__sub--menu__link">Error Page</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="header__menu--items">
+                                        <a class="header__menu--link text-white" href="{% url 'main:contact' %}">Контакты </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="language__currency d-none d-lg-block">
+                            <ul class="d-flex align-items-center">
+                                <li class="language__currency--list">
+                                    <a class="account__currency--link" href="javascript:void(0)">
+                                        <img class="currency__link--icon" src="{% static "img/icon/language-icon.webp" %}" alt="currency">
+                                        <span>D</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9.797" height="6.05" viewBox="0 0 9.797 6.05">
+                                            <path  d="M14.646,8.59,10.9,12.329,7.151,8.59,6,9.741l4.9,4.9,4.9-4.9Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown__currency">
+                                        <ul>
+                                            <li class="currency__items"><a class="currency__text" href="#">CAD</a></li>
+                                            <li class="currency__items"><a class="currency__text" href="#">CNY</a></li>
+                                            <li class="currency__items"><a class="currency__text" href="#">EUR</a></li>
+                                            <li class="currency__items"><a class="currency__text" href="#">GBP</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="language__currency--list">
+                                    <a class="language__switcher" href="javascript:void(0)">
+                                        <span>English</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9.797" height="6.05" viewBox="0 0 9.797 6.05">
+                                            <path  d="M14.646,8.59,10.9,12.329,7.151,8.59,6,9.741l4.9,4.9,4.9-4.9Z" transform="translate(-6 -8.59)" fill="currentColor" opacity="0.7"/>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown__language">
+                                        <ul>
+                                            <li class="language__items"><a class="language__text" href="#">France</a></li>
+                                            <li class="language__items"><a class="language__text" href="#">Rsia</a></li>
+                                            <li class="language__items"><a class="language__text" href="#">Spanish</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
