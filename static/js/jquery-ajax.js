@@ -43,6 +43,9 @@ $(document).ready(function () {
                 var cartItemsContainer = $("#cart-items-container");
                 cartItemsContainer.html(data.cart_items_html);
 
+                var cartItemsContainer2 = $("#cart-container-2");
+                cartItemsContainer2.html(data.cart_items_html);
+
             },
 
             error: function (data) {
@@ -109,13 +112,13 @@ $(document).ready(function () {
 
     // Теперь + - количества товара
     // Обработчик события для уменьшения значения
-    $(document).on("click", ".decrement", function () {
+    $(document).on("click", ".decrease", function () {
         // Берем ссылку на контроллер django из атрибута data-cart-change-url
         var url = $(this).data("cart-change-url");
         // Берем id корзины из атрибута data-cart-id
         var cartID = $(this).data("cart-id");
         // Ищем ближайшеий input с количеством
-        var $input = $(this).closest('.input-group').find('.number');
+        var $input = $(this).closest('.quantity__box').find('.number');
         // Берем значение количества товара
         var currentValue = parseInt($input.val());
         // Если количества больше одного, то только тогда делаем -1
@@ -128,13 +131,13 @@ $(document).ready(function () {
     });
 
     // Обработчик события для увеличения значения
-    $(document).on("click", ".increment", function () {
+    $(document).on("click", ".increase", function () {
         // Берем ссылку на контроллер django из атрибута data-cart-change-url
         var url = $(this).data("cart-change-url");
         // Берем id корзины из атрибута data-cart-id
         var cartID = $(this).data("cart-id");
         // Ищем ближайшеий input с количеством
-        var $input = $(this).closest('.input-group').find('.number');
+        var $input = $(this).closest('.quantity__box').find('.number');
         // Берем значение количества товара
         var currentValue = parseInt($input.val());
 
