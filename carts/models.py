@@ -48,4 +48,6 @@ class Cart(models.Model):
         return self.product.price * self.quantity
 
     def __str__(self):
-        return f"Корзина {self.user.username} | Товар {self.product.name} | Количество {self.quantity}"
+        if self.user:
+            return f"Корзина {self.user.username} | Товар {self.product.name} | Количество {self.quantity}"
+        return f"Корзина Анонимная корзина | Товар {self.product.name} | Количество {self.quantity}"
