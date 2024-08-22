@@ -310,7 +310,7 @@
                                 </a>
                             </li>
                             <!-- Кнопка корзины -->
-                             {% if not request.path == '/users/user-cart/' and  not request.path == '/orders/order-create/'%}
+                             {% if not request.path == '/users/user-cart/' and  not request.path == '/orders/create-order/'%}
 	                            <li class="header__account--items header__minicart--items" id="cart-container-2">
 	                             {% include "includes/cart_button.html" %}
                                 </li>

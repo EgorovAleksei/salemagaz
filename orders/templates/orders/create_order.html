@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static carts_tags %}
+{% user_carts request as carts %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+    <main class="main__content_wrapper">
+
+        <!-- Start checkout page area -->
+        <div class="checkout__page--area section--padding">
+            <div class="container">
+                {% if carts %}
+                    <div class="row">
+                        <div class="col-lg-7 col-md-6">
+                            <div class="main checkout__mian">
+                                <form action="{% url 'orders:create-order' %}" method="post">
+                                {% csrf_token %}
+                                    <div class="checkout__content--step section__contact--information">
+                                        <div class="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
+                                            <h2 class="section__header--title h3">Contact information</h2>
+                                             {% if not user.is_authenticated %}
+                                            <p class="layout__flex--item">
+                                                Already have an account?
+                                                <a class="layout__flex--item__link" href="{% url 'user:login' %}?next={{request.path}}">Log in</a>
+                                            </p>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="customer__information">
+                                            <div class="checkout__email--phone mb-12">
+                                                <label for="id_phone_number">
+                                                    <input class="checkout__input--field border-radius-5" placeholder="Номер телефона" id=id_phone_number"
+                                                           value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% endif %}"
+                                                               type="text" name="phone_number">
+                                                </label>
+                                                {% if form.phone_number.errors %}
+                                                    <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                        {{ form.phone_number.errors }}
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="checkout__content--step section__shipping--address">
+                                        <div class="section__header mb-25">
+                                            <h2 class="section__header--title h3">Billing Details</h2>
+                                        </div>
+                                        <div class="section__shipping--address__content">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
+                                                    <div class="checkout__input--list ">
+                                                        <label class="checkout__input--label mb-5" for="id_first_name">Имя <span class="checkout__input--label__star">*</span></label>
+                                                        <input class="checkout__input--field border-radius-5" placeholder="Имя" id="id_first_name"
+                                                               value="{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}"
+                                                               type="text" name="first_name">
+                                                        {% if form.first_name.errors %}
+                                                            <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                                {{ form.first_name.errors }}
+                                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
+                                                    <div class="checkout__input--list">
+                                                        <label class="checkout__input--label mb-5" for="id_last_name">Фамилия <span class="checkout__input--label__star">*</span></label>
+                                                        <input class="checkout__input--field border-radius-5" placeholder="Фамилия" id="id_last_name"
+                                                               value="{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}"
+                                                               type="text" name="last_name">
+                                                        {% if form.last_name.errors %}
+                                                            <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                                {{ form.last_name.errors }}
+                                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mb-10">
+                                                    <div class="checkout__input--list">
+                                                        <label class="checkout__input--label mb-1" for="id_address">Адрес <span class="checkout__input--label__star">*</span></label>
+                                                        <input class="checkout__input--field border-radius-5" placeholder="г. Москва, ул. Победы 47 корп. 2, кв. 16, подъезд 1" id="id_address"
+                                                                value="{% if form.address.value %}{{ form.address.value }}{% endif %}"
+                                                               type="text" name="address">
+                                                         {% if form.address.errors %}
+                                                            <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                                {{ form.address.errors }}
+                                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order-notes mb-20">
+                                        <label class="checkout__input--label mb-5" for="id_note">Примечания к заказу* <span class="checkout__input--label__star">*</span></label>
+                                       <textarea class="checkout__notes--textarea__field border-radius-5" id="id_note" placeholder="Примечания к вашему заказу, например, особые желания по доставке, оплате." spellcheck="false"></textarea>
+                                    </div>
+                                    <div class="checkout__content--step__footer d-flex align-items-center">
+                                        <a class="continue__shipping--btn primary__btn border-radius-5" href="{% url 'goods:product' %}">Continue To Shipping</a>
+                                        <a class="previous__link--content" href="{% url 'user:user_cart' %}">Return to cart</a>
+                                    </div>
+                                    <div class="payment__history mb-30">
+                                        <h3 class="payment__history--title mb-20">Payment</h3>
+                                        <ul class="payment__history--inner d-flex">
+                                            <li class="payment__history--list">
+                                                <input class="form-check-input " type="radio" name="payment_on_get"
+                                                            id="id_payment" value="0" checked>
+                                                <label class="form-check-label" id="id_payment">Картой</label>
+                                            </li>
+                                            <li class="payment__history--list">
+                                                <input class="form-check-input" type="radio" name="payment_on_get"
+                                                            id="id_payment" value="1" >
+                                                <label class="form-check-label" id="id_payment">СБП</label>
+                                            </li>
+                                            <li class="payment__history--list">
+                                                <input class="form-check-input" type="radio" name="payment_on_get"
+                                                            id="id_payment" value="2" >
+                                                <label class="form-check-label" id="id_payment" >Наличкой</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <button class="checkout__now--btn primary__btn" type="submit">Оформить заказ</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-md-6">
+                            <aside class="checkout__sidebar sidebar border-radius-10">
+                                <h2 class="checkout__order--summary__title text-center mb-15">Your Order Summary</h2>
+                                <div class="cart__table checkout__product--table">
+                                    <table class="cart__table--inner">
+                                        <tbody class="cart__table--body">
+                                        {% for cart in carts %}
+                                            <tr class="cart__table--body__items">
+                                                <td class="cart__table--body__list">
+                                                    <div class="product__image two  d-flex align-items-center">
+                                                        <div class="product__thumbnail border-radius-5">
+                                                            <a class="display-block" href="{{ cart.product.get_absolute_url }}"><img class="display-block border-radius-5" src="{{ cart.product.pics.1 }}" alt="{{ cart.product.name }}"></a>
+                                                            <span class="product__thumbnail--quantity">{{ cart.quantity }}</span>
+                                                        </div>
+                                                        <div class="product__description">
+                                                            <h4 class="product__description--name"><a href="{{ cart.product.get_absolute_url }}">{{ cart.product.name }}</a></h4>
+                                                            <span class="product__description--variant">{{ cart.product.sell_price }}₽</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="cart__table--body__list">
+                                                    <span class="cart__price">{{ cart.products_price }}₽</span>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="checkout__total">
+                                    <table class="checkout__total--table">
+                                        <tbody class="checkout__total--body">
+                                            <tr class="checkout__total--items">
+                                                <td class="checkout__total--title text-left">Сумма без скидки</td>
+                                                <td class="checkout__total--amount text-right">{{ carts.sub_total_price }}</td>
+                                            </tr>
+                                            <tr class="checkout__total--items">
+                                                <td class="checkout__total--title text-left">Shipping</td>
+                                                <td class="checkout__total--calculated__text text-right">Calculated at next step</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot class="checkout__total--footer">
+                                            <tr class="checkout__total--footer__items">
+                                                <td class="checkout__total--footer__title checkout__total--footer__list text-left">Итого сумма </td>
+                                                <td class="checkout__total--footer__amount checkout__total--footer__list text-right">{{ carts.total_price }}</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                            </aside>
+                        </div>
+
+                    </div>
+                {% else %}
+                    <div class="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
+                        <h2 class="section__header--title h3">Корзина пуста. Добавьте товары в корзину.</h2>
+                         {% if not user.is_authenticated %}
+                            <p class="layout__flex--item">
+                                Already have an account?
+                                <a class="layout__flex--item__link" href="{% url 'user:login' %}?next={{request.path}}">Log in</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <!-- End checkout page area -->
+
+
+    </main>
+{% endblock %}

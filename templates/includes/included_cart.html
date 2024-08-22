@@ -45,7 +45,7 @@
                                                 </div>
                                             </td>
                                             <td class="cart__table--body__list">
-                                                <span class="cart__price">{{ cart.product.sell_price }} рублей</span>
+                                                <span class="cart__price">{{ cart.product.sell_price }} ₽</span>
                                             </td>
                                             <td class="cart__table--body__list">
                                                 <div class="quantity__box">
@@ -67,7 +67,7 @@
                                                 </div>
                                             </td>
                                             <td class="cart__table--body__list">
-                                                <span class="cart__price end">{{ cart.products_price }}</span>
+                                                <span class="cart__price end">{{ cart.products_price }}₽</span>
                                             </td>
                                         </tr>
                                         {% endfor %}
@@ -121,7 +121,7 @@
                                         <ul class="d-flex justify-content-between">
                                             <li><button class="cart__summary--footer__btn primary__btn cart" type="submit">Update Cart</button></li>
                                             {% if carts %}
-                                            <li><a class="cart__summary--footer__btn primary__btn checkout" href="checkout.html">Офорить заказ
+                                            <li><a class="cart__summary--footer__btn primary__btn checkout" href="{% url 'orders:create-order' %}">Офорить заказ
                                             </a></li>
                                             {% endif %}
                                         </ul>

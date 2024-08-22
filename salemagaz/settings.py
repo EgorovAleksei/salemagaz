@@ -16,7 +16,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 INTERNAL_IPS = ["127.0.0.1", "localhost"]
-
+DOMAIN_NAME = os.getenv("DOMAIN_NAME")
 # Application definition
 
 INSTALLED_APPS = [
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "main",
     "goods",
     "carts",
+    "orders",
 ]
 
 MIDDLEWARE = [
