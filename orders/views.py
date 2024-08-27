@@ -12,11 +12,8 @@ def view_order(request):
 
 def create_order(request):
     if request.method == "POST":
-        print(f"метод пост")
         form = CreateOrderForm(data=request.POST)
-        print(form)
         if form.is_valid():
-            print(f"форма валидна")
             try:
                 # пытаемся создать заказ, если хватает товара
                 with transaction.atomic():
