@@ -7,7 +7,8 @@ from carts.models import Cart
 
 class CartTabAdmin(admin.TabularInline):
     model = Cart
-    fields = ("product", "quantity", "created")
+    fields = ("quantity", "created")
+    list_display = ("__str__",)
     # search_fields = ("product", "quantity", "created")
     readonly_fields = ("created",)
     extra = 1

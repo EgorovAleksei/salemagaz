@@ -97,10 +97,7 @@ def cart_change(request):
 
 
 def cart_remove(request):
-    print("cart_r")
-    print(request)
     cart_id = request.POST.get("cart_id")
-    print(f"{cart_id=}")
     cart = Cart.objects.get(id=cart_id)
     quantity = cart.quantity
     cart.delete()

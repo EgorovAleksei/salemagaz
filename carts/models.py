@@ -47,6 +47,9 @@ class Cart(models.Model):
     def sub_products_price(self):
         return self.product.price * self.quantity
 
+    def pr_name(self):
+        return self.product.name
+
     def __str__(self):
         if self.user:
             return f"Корзина {self.user.username} | Товар {self.product.name} | Количество {self.quantity}"

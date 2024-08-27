@@ -57,7 +57,9 @@ class Order(models.Model):
     address = models.CharField(max_length=256)
     note = models.TextField(verbose_name="Примечание")
     status = models.SmallIntegerField(default=CREATED, choices=STATUS)
-    payment = models.SmallIntegerField(default=CREATED, choices=PAYMENT)
+    payment = models.SmallIntegerField(
+        default=CREATED, choices=PAYMENT, verbose_name="Способ оплаты"
+    )
 
     class Meta:
         db_table = "order"
@@ -66,7 +68,9 @@ class Order(models.Model):
         ordering = ["-created_timestamp"]
 
     def __str__(self):
-        return f"Заказ №{self.id}. Покупатель{self.first_name} {self.last_name}"
+        return (
+            f"Заказ №{self.id}. Покупатель {self.user.first_name} {self.user.last_name}"
+        )
 
     # def update_after_payment(self):
     #     baskets = Cart.objects.filter(user=self.user)

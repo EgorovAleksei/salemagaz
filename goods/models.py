@@ -96,7 +96,7 @@ class Products(models.Model):
         null=True,
         blank=True,
     )
-    category = TreeForeignKey(
+    category = models.ForeignKey(
         to=Category,
         db_column="category",
         on_delete=models.CASCADE,

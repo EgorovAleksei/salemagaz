@@ -8,3 +8,4 @@ class CreateOrderForm(forms.Form):
     phone_number = forms.CharField()
     address = forms.CharField()
     note = forms.CharField()
+    payment = forms.CharField()

@@ -51,7 +51,7 @@
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
                                                     <div class="checkout__input--list ">
-                                                        <label class="checkout__input--label mb-5" for="id_first_name">Имя <span class="checkout__input--label__star">*</span></label>
+                                                        <label class="checkout__input--label mb-5" for="{{ form.first_name.id_for_label }}">Имя <span class="checkout__input--label__star">*</span></label>
                                                         <input class="checkout__input--field border-radius-5" placeholder="Имя" id="id_first_name"
                                                                value="{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}"
                                                                type="text" name="first_name">
@@ -65,7 +65,7 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
                                                     <div class="checkout__input--list">
-                                                        <label class="checkout__input--label mb-5" for="id_last_name">Фамилия <span class="checkout__input--label__star">*</span></label>
+                                                        <label class="checkout__input--label mb-5" for="{{ form.last_name.id_for_label }}">Фамилия <span class="checkout__input--label__star">*</span></label>
                                                         <input class="checkout__input--field border-radius-5" placeholder="Фамилия" id="id_last_name"
                                                                value="{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}"
                                                                type="text" name="last_name">
@@ -79,7 +79,7 @@
                                                 </div>
                                                 <div class="col-12 mb-10">
                                                     <div class="checkout__input--list">
-                                                        <label class="checkout__input--label mb-1" for="id_address">Адрес <span class="checkout__input--label__star">*</span></label>
+                                                        <label class="checkout__input--label mb-1" for="{{ form.address.id_for_label }}">Адрес <span class="checkout__input--label__star">*</span></label>
                                                         <input class="checkout__input--field border-radius-5" placeholder="г. Москва, ул. Победы 47 корп. 2, кв. 16, подъезд 1" id="id_address"
                                                                 value="{% if form.address.value %}{{ form.address.value }}{% endif %}"
                                                                type="text" name="address">
@@ -98,29 +98,38 @@
                                     </div>
                                     <div class="order-notes mb-20">
                                         <label class="checkout__input--label mb-5" for="id_note">Примечания к заказу* <span class="checkout__input--label__star">*</span></label>
-                                       <textarea class="checkout__notes--textarea__field border-radius-5" id="id_note" placeholder="Примечания к вашему заказу, например, особые желания по доставке, оплате." spellcheck="false"></textarea>
+                                        <input class="checkout__notes--textarea__field border-radius-5" placeholder="Особые пожелания. Например желаемые время и дата доставки." id="id_note"
+                                                                value="{% if form.note.value %}{{ form.note.value }}{% endif %}"
+                                                               type="text" name="note">
+                                                         {% if form.note.errors %}
+                                                            <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
+                                                                {{ form.note.errors }}
+                                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                            </div>
+                                                        {% endif %}
                                     </div>
                                     <div class="checkout__content--step__footer d-flex align-items-center">
-                                        <a class="continue__shipping--btn primary__btn border-radius-5" href="{% url 'goods:product' %}">Continue To Shipping</a>
+                                        <a class="continue__shipping--btn primary__btn border-radius-5" href="{% url 'goods:index' %}">Continue To Shipping</a>
                                         <a class="previous__link--content" href="{% url 'user:user_cart' %}">Return to cart</a>
                                     </div>
                                     <div class="payment__history mb-30">
-                                        <h3 class="payment__history--title mb-20">Payment</h3>
+{#                                        <h3 class="payment__history--title mb-20">Payment</h3>#}
+                                        <label for="payment" class="form-label">Payment </label>
                                         <ul class="payment__history--inner d-flex">
                                             <li class="payment__history--list">
-                                                <input class="form-check-input " type="radio" name="payment_on_get"
-                                                            id="id_payment" value="0" checked>
-                                                <label class="form-check-label" id="id_payment">Картой</label>
+                                                <input class="form-check-input " type="radio" name="payment"
+                                                id="id_payment" value="0" checked>
+                                                <label class="form-check-label" for="id_payment" id="id_payment">Картой</label>
                                             </li>
                                             <li class="payment__history--list">
-                                                <input class="form-check-input" type="radio" name="payment_on_get"
+                                                <input class="form-check-input" type="radio" name="payment"
                                                             id="id_payment" value="1" >
-                                                <label class="form-check-label" id="id_payment">СБП</label>
+                                                <label class="form-check-label" for="id_payment" id="id_payment">СБП</label>
                                             </li>
                                             <li class="payment__history--list">
-                                                <input class="form-check-input" type="radio" name="payment_on_get"
+                                                <input class="form-check-input" type="radio" name="payment"
                                                             id="id_payment" value="2" >
-                                                <label class="form-check-label" id="id_payment" >Наличкой</label>
+                                                <label class="form-check-label" for="id_payment" id="id_payment" >Наличкой</label>
                                             </li>
                                         </ul>
                                     </div>
