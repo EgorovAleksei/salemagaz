@@ -1,7 +1,11 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.db.models import Prefetch
 from django.shortcuts import redirect, render
 from django.db import transaction
+from django.views.generic import DetailView
+
 from orders.forms import CreateOrderForm
 from orders.models import Order, OrderItem, Cart
 
@@ -10,6 +14,7 @@ def view_order(request):
     return render(request, "orders/create_order.html")
 
 
+@login_required
 def create_order(request):
     if request.method == "POST":
         form = CreateOrderForm(data=request.POST)
@@ -28,6 +33,7 @@ def create_order(request):
                             address=form.cleaned_data["address"],
                             note=form.cleaned_data["note"],
                             payment=form.cleaned_data["payment"],
+                            orders_sum=cart_items.total_price(),
                         )
 
                         for cart_item in cart_items:
@@ -74,3 +80,40 @@ def create_order(request):
         "form": form,
     }
     return render(request, "orders/create_order.html", context=context)
+
+
+@login_required()
+def orders(request):
+    orders = Order.objects.filter(user=request.user).order_by("-id")
+
+    # for order in orders:
+    #     # print(order.orderitem_set.all())
+    #     for x in order.orderitem_set.all():
+    #         print(x.price, x.quantity)
+
+    context = {"orders": orders}
+    return render(request, "orders/orders.html", context=context)
+
+
+class OrderDetailView(DetailView):
+    template_name = "orders/order.html"
+    context_object_name = "order"
+    # model = Order
+
+    def get_queryset(self):
+        orders = (
+            Order.objects.filter(pk=self.kwargs["pk"])
+            .prefetch_related(
+                Prefetch(
+                    "orderitem_set",
+                    queryset=OrderItem.objects.select_related("product"),
+                )
+            )
+            .order_by("-id")
+        )
+        return orders
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = f"SaleMagaz - Заказ #{self.object.id}"
+        return context

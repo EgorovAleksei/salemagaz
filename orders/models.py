@@ -60,6 +60,9 @@ class Order(models.Model):
     payment = models.SmallIntegerField(
         default=CREATED, choices=PAYMENT, verbose_name="Способ оплаты"
     )
+    orders_sum = models.PositiveIntegerField(
+        blank=True, null=True, verbose_name="сумма"
+    )
 
     class Meta:
         db_table = "order"

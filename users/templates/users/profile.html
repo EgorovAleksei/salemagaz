@@ -19,7 +19,7 @@
                         <ul class="account__menu">
                             <li class="account__menu--list active"><a href="{% url 'user:profile' %}">My Profile</a></li>
                             <li class="account__menu--list"><a href="{% url 'user:user_cart' %}">Корзина</a></li>
-                            <li class="account__menu--list"><a href="my-account.html">Dashboard</a></li>
+                            <li class="account__menu--list"><a href="{% url 'orders:orders' %}">Dashboard</a></li>
                             <li class="account__menu--list"><a href="my-account-2.html">Addresses</a></li>
                             <li class="account__menu--list"><a href="wishlist.html">Wishlist</a></li>
                             <li class="account__menu--list"><a href="{% url 'user:logout' %}">Log Out</a></li>
