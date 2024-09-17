@@ -1,10 +1,70 @@
+import random
+
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
+from django.http import Http404
 
-from goods.models import Products
+from goods.models import Category, Products
 from goods.utils import q_search
+
+
+class CatalogView(ListView):
+    # Вместо model = Products используем get_queryset
+    model = Products
+    # queryset если надо вместо all что вывести другое.
+    # queryset = Products.objects.filter(category=category_id).select_related(
+    #     "category", "brand"
+    # )
+    template_name = "goods/catalog.html"
+    context_object_name = "goods"
+    paginate_by = 15
+    allow_empty = False
+    extra_context = {"title": "SaleMagaz - Товары", "category_id": 0}
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("category_id", 0)
+        if category_id == 0:
+            category_id = Category.objects.filter(parent__gt=2).values_list(
+                "id", flat=True
+            )
+            x = random.randint(0, len(category_id) - 1)
+            category_id = category_id[x : x + 1][0]
+
+        on_sale = self.request.GET.get("on_sale", None)
+        order_by = self.request.GET.get("order_by", None)
+        query = self.request.GET.get("q", None)
+
+        if category_id:
+            # goods = get_object_or_404(Products.objects.filter(category=category_id).
+            #                       select_related('category', 'brand'))
+            goods = (
+                super()
+                .get_queryset()
+                .filter(category=category_id)
+                .select_related("category", "brand")
+            )
+            if not goods.exists():
+                print(category_id)
+                raise Http404
+        elif query:
+            goods = q_search(query)
+        else:
+            goods = super().get_queryset()
+            # goods = (
+            #     Products.objects.all()
+            #     .select_related("category", "brand")
+            #     .order_by("-updated")
+            # )
+
+        if on_sale:
+            goods = goods.filter(discount__gt=0)
+
+        if order_by:
+            goods = goods.order_by(order_by)
+
+        return goods
 
 
 # def catalog(request, category_id=0):

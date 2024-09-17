@@ -6,91 +6,93 @@
         <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
 {#            <li class="pagination__list ">#}
             <li class="pagination__list disabled">
-                <a href="?{% if goods.has_previous %}{% change_params page=goods.previous_page_number %}{% else %}#{% endif %}">
+                <a href="?{% if page_obj.has_previous %}{% change_params page=page_obj.previous_page_number %}{% else %}#{% endif %}">
                     <svg xmlns="http://www.w3.org/2000/svg"  width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292"/></svg>
-                    <span class="visually-hidden">page left arrow {{ goods.paginator.has_next }} </span>
+                    <span class="visually-hidden">page left arrow {{ page_obj.paginator.has_next }} </span>
 
                 </a>
             <li>
-            {% if goods.paginator.num_pages < 15 %}
-                {% for page in goods.paginator.page_range %}
-                        <li class="pagination__list">
-                            {% if goods.number == page %}
-                                <span class="pagination__item pagination__item--current">{{ page }}</span>
-                            {% else %}
-                                <a class="pagination__item link" href="?{% change_params page=page %}">
-                                    {{ page }}</a>
-                            {% endif %}
-                        </li>
-                {% endfor %}
-            {% else %}
+            {% if is_paginated %}
+                {% if page_obj.paginator.num_pages < 15 %}
+                    {% for page in page_obj.paginator.page_range %}
+                            <li class="pagination__list">
+                                {% if page_obj.number == page %}
+                                    <span class="pagination__item pagination__item--current">{{ page }}</span>
+                                {% else %}
+                                    <a class="pagination__item link" href="?{% change_params page=page %}">
+                                        {{ page }}</a>
+                                {% endif %}
+                            </li>
+                    {% endfor %}
+                {% else %}
 
 
-                <li class="pagination__list">
-                            {% if goods.number == 1 %}
-                            <span class="pagination__item pagination__item--current">1</span>
-                            {% else %}
-                                <a class="pagination__item link" href="?{% change_params page=1 %}">
-                                    1</a>
-                            {% endif %}
-                </li>
-                <li class="pagination__list">
-                            {% if goods.number == 2 %}
-                            <span class="pagination__item pagination__item--current">2</span>
-                            {% else %}
-                                <a class="pagination__item link" href="?{% change_params page=2 %}">
-                                    2</a>
-                            {% endif %}
-                </li>
+                    <li class="pagination__list">
+                                {% if page_obj.number == 1 %}
+                                <span class="pagination__item pagination__item--current">1</span>
+                                {% else %}
+                                    <a class="pagination__item link" href="?{% change_params page=1 %}">
+                                        1</a>
+                                {% endif %}
+                    </li>
+                    <li class="pagination__list">
+                                {% if page_obj.number == 2 %}
+                                <span class="pagination__item pagination__item--current">2</span>
+                                {% else %}
+                                    <a class="pagination__item link" href="?{% change_params page=2 %}">
+                                        2</a>
+                                {% endif %}
+                    </li>
 
 
 
-                {% for page in goods.paginator.page_range %}
+                    {% for page in page_obj.paginator.page_range %}
 
-                    {% if page > 2 and page < goods.paginator.num_pages|add:-1 %}
-                    {% if goods.number|add:1 >= page and page >= goods.number|add:-1 %}
-                        <li class="pagination__list">
-                            {% if goods.number == page %}
-                                <span class="pagination__item pagination__item--current">{{ page }}</span>
-                            {% else %}
-                                <a class="pagination__item link" href="?{% change_params page=page %}">
-                                    {{ page }}</a>
-                            {% endif %}
-                        </li>
+                        {% if page > 2 and page < page_obj.paginator.num_pages|add:-1 %}
+                        {% if page_obj.number|add:1 >= page and page >= page_obj.number|add:-1 %}
+                            <li class="pagination__list">
+                                {% if page_obj.number == page %}
+                                    <span class="pagination__item pagination__item--current">{{ page }}</span>
+                                {% else %}
+                                    <a class="pagination__item link" href="?{% change_params page=page %}">
+                                        {{ page }}</a>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                        {% if page_obj.number|add:1 < page and page < page_obj.number|add:3 %}
+                            <li class="pagination__list">.</li>
+                            <li class="pagination__list">.</li>
+                            <li class="pagination__list">.</li>
+                        {% endif %}
+                        {% if page_obj.number|add:-2 > page and page > page_obj.number|add:1 %}
+                            <li class="pagination__list">.</li>
+                            <li class="pagination__list">.</li>
+                            <li class="pagination__list">.</li>
+                        {% endif %}
+
                     {% endif %}
-                    {% if goods.number|add:1 < page and page < goods.number|add:3 %}
-                        <li class="pagination__list">.</li>
-                        <li class="pagination__list">.</li>
-                        <li class="pagination__list">.</li>
-                    {% endif %}
-                    {% if goods.number|add:-2 > page and page > goods.number|add:1 %}
-                        <li class="pagination__list">.</li>
-                        <li class="pagination__list">.</li>
-                        <li class="pagination__list">.</li>
-                    {% endif %}
-
+                    {% endfor %}
+                    <li class="pagination__list">
+                                {% if page_obj.number == page_obj.paginator.num_pages|add:-1 %}
+                                <span class="pagination__item pagination__item--current">{{ page_obj.paginator.num_pages|add:-1 }}</span>
+                                {% else %}
+                                    <a class="pagination__item link" href="?{% change_params page=page_obj.paginator.num_pages|add:-1 %}">
+                                        {{ page_obj.paginator.num_pages|add:-1 }}</a>
+                                {% endif %}
+                    </li>
+                    <li class="pagination__list">
+                                {% if page_obj.number ==  page_obj.paginator.num_pages %}
+                                <span class="pagination__item pagination__item--current">{{ page_obj.paginator.num_pages }}</span>
+                                {% else %}
+                                    <a class="pagination__item link" href="?{% change_params page=page_obj.paginator.num_pages %}">
+                                        {{ page_obj.paginator.num_pages }}</a>
+                                {% endif %}
+                    </li>
                 {% endif %}
-                {% endfor %}
-                <li class="pagination__list">
-                            {% if goods.number == goods.paginator.num_pages|add:-1 %}
-                            <span class="pagination__item pagination__item--current">{{ goods.paginator.num_pages|add:-1 }}</span>
-                            {% else %}
-                                <a class="pagination__item link" href="?{% change_params page=goods.paginator.num_pages|add:-1 %}">
-                                    {{ goods.paginator.num_pages|add:-1 }}</a>
-                            {% endif %}
-                </li>
-                <li class="pagination__list">
-                            {% if goods.number ==  goods.paginator.num_pages %}
-                            <span class="pagination__item pagination__item--current">{{ goods.paginator.num_pages }}</span>
-                            {% else %}
-                                <a class="pagination__item link" href="?{% change_params page=goods.paginator.num_pages %}">
-                                    {{ goods.paginator.num_pages }}</a>
-                            {% endif %}
-                </li>
             {% endif %}
 
             <li class="pagination__list">
-                <a href="{% if goods.has_next %}?{% change_params page=goods.next_page_number %}{% else %}#{% endif %}">
+                <a href="{% if page_obj.has_next %}?{% change_params page=page_obj.next_page_number %}{% else %}#{% endif %}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22.51" height="20.443" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100"/></svg>
                     <span class="visually-hidden">page right arrow</span>
                 </a>

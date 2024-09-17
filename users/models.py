@@ -9,7 +9,7 @@ from django.utils.timezone import now
 class User(AbstractUser):
     image = models.ImageField(upload_to="users_images", null=True, blank=True)
     is_verified_email = models.BooleanField(default=False)
-    phone_number = models.CharField(max_length=10, blank=True, null=True)
+    phone_number = models.CharField(max_length=16, blank=True, null=True)
 
     class Meta:
         verbose_name = "Пользователя"
