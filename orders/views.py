@@ -1,15 +1,19 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db.models import Prefetch
 from django.shortcuts import redirect, render
 from django.db import transaction
-from django.views.generic import DetailView, FormView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import DetailView, FormView, ListView
 
+from common.mixin import CacheMixin
 from orders.forms import CreateOrderForm
 from orders.models import Order, OrderItem, Cart
 from orders.utils import create_order
+from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 
 
 def view_order(request):
@@ -41,6 +45,73 @@ class CreateOrderView(LoginRequiredMixin, FormView):
         context["title"] = "Salemagaz - Оформление заказа"
         return context
 
+
+class OrderListView(LoginRequiredMixin, CacheMixin, ListView):
+    template_name = "orders/orders.html"
+    context_object_name = "orders"
+    # model = Order
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     orders = cache.get(f"orders_for_user_{self.request.user.id}")
+    #     if not orders:
+    #         orders = Order.objects.filter(user=self.request.user).order_by("-id")
+    #         cache.set(f"orders_for_user_{self.request.user.id}", orders, 60)
+    #     context["orders"] = orders
+    #     return context
+
+    def get_queryset(self):
+        orders = self.set_get_cache(
+            Order.objects.filter(user=self.request.user).order_by("-id"),
+            f"orders_for_user_{self.request.user.id}",
+            10,
+        )
+        return orders
+
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    template_name = "orders/order.html"
+    context_object_name = "order"
+    # model = Order
+
+    def get_queryset(self):
+        orders = (
+            Order.objects.filter(pk=self.kwargs["pk"], user=self.request.user)
+            .prefetch_related(
+                Prefetch(
+                    "orderitem_set",
+                    queryset=OrderItem.objects.select_related("product"),
+                )
+            )
+            .order_by("-id")
+        )
+        if not orders:
+            orders = Order.objects.filter(user=self.request.user).order_by("-id")
+
+            self.kwargs["pk"] = orders[0].id
+            orders = (
+                Order.objects.filter(pk=self.kwargs["pk"], user=self.request.user)
+                .prefetch_related(
+                    Prefetch(
+                        "orderitem_set",
+                        queryset=OrderItem.objects.select_related("product"),
+                    )
+                )
+                .order_by("-id")
+            )
+        return orders
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = f"SaleMagaz - Заказ #{self.object.id}"
+        return context
+
+
+# @login_required()
+# def orders(request):
+#     orders = Order.objects.filter(user=request.user).order_by("-id")
+#     context = {"orders": orders}
+#     return render(request, "orders/orders.html", context=context)
 
 # @login_required
 # def create_order(request):
@@ -108,40 +179,3 @@ class CreateOrderView(LoginRequiredMixin, FormView):
 #         "form": form,
 #     }
 #     return render(request, "orders/create_order.html", context=context)
-
-
-@login_required()
-def orders(request):
-    orders = Order.objects.filter(user=request.user).order_by("-id")
-
-    # for order in orders:
-    #     # print(order.orderitem_set.all())
-    #     for x in order.orderitem_set.all():
-    #         print(x.price, x.quantity)
-
-    context = {"orders": orders}
-    return render(request, "orders/orders.html", context=context)
-
-
-class OrderDetailView(DetailView):
-    template_name = "orders/order.html"
-    context_object_name = "order"
-    # model = Order
-
-    def get_queryset(self):
-        orders = (
-            Order.objects.filter(pk=self.kwargs["pk"])
-            .prefetch_related(
-                Prefetch(
-                    "orderitem_set",
-                    queryset=OrderItem.objects.select_related("product"),
-                )
-            )
-            .order_by("-id")
-        )
-        return orders
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = f"SaleMagaz - Заказ #{self.object.id}"
-        return context

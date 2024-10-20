@@ -19,6 +19,7 @@ INTERNAL_IPS = ["127.0.0.1", "localhost"]
 DOMAIN_NAME = os.getenv("DOMAIN_NAME")
 # Application definition
 
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -31,13 +32,14 @@ INSTALLED_APPS = [
     "django_mptt_admin",
     "mptt",
     "debug_toolbar",
+    "rest_framework",
     "users",
     "main",
     "goods",
     "carts",
     "orders",
+    "api",
 ]
-
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -90,6 +92,15 @@ DATABASES = {
         "PORT": os.getenv("DATABASES_PORT"),
     }
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": BASE_DIR / "cache",
+    }
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -140,3 +151,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = "/user/login/"
 LOGIN_REDIRECT_URL = "/"
+
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ]
+}

@@ -1,6 +1,7 @@
 import random
 
 from django.core.paginator import Paginator
+from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 from django.views.generic import DetailView, ListView
@@ -24,6 +25,7 @@ class CatalogView(ListView):
     extra_context = {"title": "SaleMagaz - Товары", "category_id": 0}
 
     def get_queryset(self):
+
         category_id = self.kwargs.get("category_id", 0)
         if category_id == 0:
             category_id = Category.objects.filter(parent__gt=2).values_list(
@@ -31,10 +33,13 @@ class CatalogView(ListView):
             )
             x = random.randint(0, len(category_id) - 1)
             category_id = category_id[x : x + 1][0]
+            self.extra_context["category_id"] = category_id
 
         on_sale = self.request.GET.get("on_sale", None)
         order_by = self.request.GET.get("order_by", None)
         query = self.request.GET.get("q", None)
+        price_min = self.request.GET.get("price_min", None)
+        price_max = self.request.GET.get("price_max", None)
 
         if category_id:
             # goods = get_object_or_404(Products.objects.filter(category=category_id).
@@ -46,7 +51,6 @@ class CatalogView(ListView):
                 .select_related("category", "brand")
             )
             if not goods.exists():
-                print(category_id)
                 raise Http404
         elif query:
             goods = q_search(query)
@@ -63,6 +67,11 @@ class CatalogView(ListView):
 
         if order_by:
             goods = goods.order_by(order_by)
+
+        if price_max:
+            goods = goods.filter(price__lte=price_max)
+        if price_min:
+            goods = goods.filter(price__gte=price_min)
 
         return goods
 
