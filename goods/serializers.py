@@ -14,7 +14,7 @@ class CategorySerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = "__all__"
+        fields = ("id", "name")
         read_only_fields = ["created"]
 
 
