@@ -8,17 +8,17 @@
     <main class="main__content_wrapper">
 
         <!-- Start checkout page area -->
-        <div class="checkout__page--area section--padding">
+        <div class="checkout__page--area section">
             <div class="container">
                 {% if carts %}
                     <div class="row">
                         <div class="col-lg-7 col-md-6">
                             <div class="main checkout__mian">
-                                <form action="{% url 'orders:create-order' %}" method="post">
+                                <form action="{% url 'orders:create_order' %}" method="post">
                                 {% csrf_token %}
                                     <div class="checkout__content--step section__contact--information">
                                         <div class="section__header checkout__section--header d-flex align-items-center justify-content-between mb-25">
-                                            <h2 class="section__header--title h3">Contact information</h2>
+                                            <h3 class="section__header--title h3">Contact information</h3>
                                              {% if not user.is_authenticated %}
                                             <p class="layout__flex--item">
                                                 Already have an account?
@@ -28,12 +28,13 @@
                                         </div>
 
                                         <div class="customer__information">
-                                            <div class="checkout__email--phone mb-12">
+                                            <div class="checkout__email--phone mb-4">
                                                 <label for="id_phone_number">
-                                                    <input class="checkout__input--field border-radius-5" placeholder="Номер телефона" id=id_phone_number"
+                                                    <input class="checkout__input--field border-radius-3" placeholder="Номер телефона" id=id_phone_number"
                                                            value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% endif %}"
                                                                type="text" name="phone_number">
                                                 </label>
+                                            {{ form.phone_number.errors }}
                                                 {% if form.phone_number.errors %}
                                                     <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
                                                         {{ form.phone_number.errors }}
@@ -45,13 +46,13 @@
                                     </div>
                                     <div class="checkout__content--step section__shipping--address">
                                         <div class="section__header mb-25">
-                                            <h2 class="section__header--title h3">Billing Details</h2>
+                                            <h2 class="section__header--title h2">Billing Details</h2>
                                         </div>
                                         <div class="section__shipping--address__content">
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
                                                     <div class="checkout__input--list ">
-                                                        <label class="checkout__input--label mb-5" for="{{ form.first_name.id_for_label }}">Имя <span class="checkout__input--label__star">*</span></label>
+                                                        <label class="checkout__input--label mb-3" for="{{ form.first_name.id_for_label }}">Имя <span class="checkout__input--label__star">*</span></label>
                                                         <input class="checkout__input--field border-radius-5" placeholder="Имя" id="id_first_name"
                                                                value="{% if form.first_name.value %}{{ form.first_name.value }}{% endif %}"
                                                                type="text" name="first_name">
@@ -65,7 +66,7 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
                                                     <div class="checkout__input--list">
-                                                        <label class="checkout__input--label mb-5" for="{{ form.last_name.id_for_label }}">Фамилия <span class="checkout__input--label__star">*</span></label>
+                                                        <label class="checkout__input--label mb-3" for="{{ form.last_name.id_for_label }}">Фамилия <span class="checkout__input--label__star">*</span></label>
                                                         <input class="checkout__input--field border-radius-5" placeholder="Фамилия" id="id_last_name"
                                                                value="{% if form.last_name.value %}{{ form.last_name.value }}{% endif %}"
                                                                type="text" name="last_name">

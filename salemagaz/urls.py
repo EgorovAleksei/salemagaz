@@ -13,6 +13,7 @@ urlpatterns = [
     path("cart/", include("carts.urls", namespace="cart")),
     path("orders/", include("orders.urls", namespace="orders")),
     path("api/", include("api.urls", namespace="api")),
+    path("payment/", include("payment.urls", namespace="payment")),
     path("api/drf-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]
 

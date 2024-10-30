@@ -1,14 +1,25 @@
 {% load static %}
+{#{% if form.non_field_errors %}#}
+{#            <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">#}
+{#            <div class="header__bottom bg__primary" role="alert">#}
+{#                {{ form.non_field_errors }}#}
+{#                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>#}
+{#            </div>#}
+{##}
+{#{% endif %}#}
+
 {% if form.non_field_errors %}
-
-            <div class="alert alert-danger alert-dismissible fabe show custom-shadow" role="alert">
-                {{ form.non_field_errors }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="alert alert-danger alert-dismissible fade show custom-shadow" role="alert">
+                    {{form.non_field_errors}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             </div>
-
+        </div>
+    </div>
 {% endif %}
-
-
 
 
 
@@ -20,18 +31,21 @@
 {#{% endif %} {% endfor %} {% else %} {% endif %}#}
 
 <div class="container mt-4">
+{#<div class="header__bottom bg__primary">#}
     <div class="row justify-content-center">
         <div class="col-md-6">
             {% if messages %}
                 {% for message in messages %}
                     {% if message.tags == 'success' %}
                     <div id="notification" class="position-fixed start-50 translate-middle-x z-3 alert alert-success fade show custom-shadow" role="alert">
-                        {{ message }}
+                        {{ message }}<p>sss</p>sss
+                    <h>hhhh</h>
                     </div>
                     {% endif %}
                     {% if message.tags == 'warning' %}
                     <div id="notification" class="position-fixed start-50 translate-middle-x z-3 alert alert-danger fade show custom-shadow" role="alert">
-                        {{ message }}
+                        {{ message }}<p>ddd</p>dfd
+                    <h>hhhh111</h>
                     </div>
                     {% endif %}
                 {% endfor %}

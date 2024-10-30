@@ -1,15 +1,14 @@
-from django.forms import model_to_dict
-from rest_framework import generics, mixins, viewsets
+from rest_framework import generics, viewsets
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet
 
-from goods.models import Category, Products
+from goods.models import Category
 
-from goods.serializers import CategorySerializers, ProductsSerializers
-from permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
+from goods.serializers import CategorySerializers
+from salemagaz.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -56,6 +55,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
 #     serializer_class = ProductsSerializers
 #
 #
+class CategoryAPIListPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = "page_size"
+    max_page_size = 10000
+
+
 class CategoryListAPIView(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializers
@@ -63,12 +68,16 @@ class CategoryListAPIView(generics.ListCreateAPIView):
         IsAuthenticatedOrReadOnly,
         IsAdminOrReadOnly,
     )
+    pagination_class = CategoryAPIListPagination
 
 
 class CategoryAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializers
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
+
+    # доступ только по токенам, по сессиям и др. не получится.
+    # authentication_classes = (TokenAuthentication,)
 
 
 class CategoryAPIDestroy(generics.RetrieveUpdateDestroyAPIView):

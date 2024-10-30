@@ -105,7 +105,7 @@ class UserProfileView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class UserCartView(TemplateView):
+class UserCartView(LoginRequiredMixin, TemplateView):
     template_name = "users/users_cart.html"
 
     def get_context_data(self, **kwargs):

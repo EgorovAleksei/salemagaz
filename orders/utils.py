@@ -4,6 +4,9 @@ from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
+from payment.models import BalanceChange
+from users.models import User
+
 
 def create_order(request, form):
     try:
@@ -12,6 +15,7 @@ def create_order(request, form):
             user = request.user
 
             cart_items = Cart.objects.filter(user=user)
+            orders_sum = cart_items.total_price()
 
             if cart_items.exists():
                 order = Order.objects.create(
@@ -20,7 +24,7 @@ def create_order(request, form):
                     address=form.cleaned_data["address"],
                     note=form.cleaned_data["note"],
                     payment=form.cleaned_data["payment"],
-                    orders_sum=cart_items.total_price(),
+                    orders_sum=orders_sum,
                 )
 
                 for cart_item in cart_items:
@@ -44,6 +48,13 @@ def create_order(request, form):
 
                     product.quantity -= quantity
                     product.save()
+
+                BalanceChange.objects.create(
+                    user_id=user,
+                    amount=orders_sum,
+                    operation_type="WD",
+                )
+                User.withdraw(pk=user.id, amount=orders_sum)
 
                 # Очищаем корзину пользователя после создания заказа.
                 cart_items.delete()

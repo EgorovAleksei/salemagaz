@@ -17,6 +17,9 @@ class CartQueryset(models.QuerySet):
     def sub_total_price(self):
         return sum(cart.sub_products_price() for cart in self)
 
+    def user_balance(self):
+        return self.total_price() - self[0].user.balance
+
 
 class Cart(models.Model):
     user = models.ForeignKey(
@@ -49,6 +52,9 @@ class Cart(models.Model):
 
     def pr_name(self):
         return self.product.name
+
+    # def cart_balance(self):
+    #     return self.total_price() - self.user_balance()
 
     def __str__(self):
         if self.user:

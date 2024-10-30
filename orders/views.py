@@ -23,22 +23,24 @@ def view_order(request):
 class CreateOrderView(LoginRequiredMixin, FormView):
     template_name = "orders/create_order.html"
     form_class = CreateOrderForm
-    success_url = "user:profile"
+    success_url = reverse_lazy("user:profile")
 
     def get_initial(self):
-        initinal = super().get_initial()
+        initial = super().get_initial()
 
-        initinal["first_name"] = self.request.user.first_name
-        initinal["last_name"] = self.request.user.last_name
-        initinal["phone_number"] = self.request.user.phone_number
-        return initinal
+        initial["first_name"] = self.request.user.first_name
+        initial["last_name"] = self.request.user.last_name
+        initial["phone_number"] = self.request.user.phone_number
+        return initial
 
     def form_valid(self, form):
         return create_order(self.request, form)
 
-    def form_invalid(self, form):
-        messages.error(self.request, "Заполните поля")
-        return redirect("orders:create-order")
+    # def form_invalid(self, form):
+    #     print(form.errors)
+    #     messages.error(self.request, "Заполните поля")
+    #     print(messages.error(self.request, "Заполните поля"))
+    #     return redirect("orders:create-order")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
