@@ -14,6 +14,7 @@ router = routers.DefaultRouter()
 
 router.register(r"category", views.CategoryViewSet, basename="category")
 
+
 urlpatterns = [
     # path("v1/", views.ProductListAPIView.as_view()),
     # path("v2/", views.ProductListAPIView.as_view()),
@@ -30,4 +31,13 @@ urlpatterns = [
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    path(
+        "crate_payment/",
+        views.CreatePaymentAPIView.as_view(),
+        name="crate_payment",
+    ),
+    path(
+        "payment_acceptance/",
+        views.CreatePaymentAcceptanceView.as_view(),
+    ),
 ]

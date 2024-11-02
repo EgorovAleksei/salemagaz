@@ -12,7 +12,7 @@ def create_payment_yookassa(data):
             "amount": {"value": data["amount"], "currency": "RUB"},
             "confirmation": {
                 "type": "redirect",
-                "return_url": "http://127.0.0.1:8000/user/user-cart/",
+                "return_url": data["return_url"],
             },
             "metadata": {
                 "user_id": data["user_id"],
